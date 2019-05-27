@@ -1,10 +1,12 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const postcssNormalize = require('postcss-normalize');
 
+const APP_PREFIX_REGEX = /^APP_/i;
+
 module.exports = {
   getClientEnvironment: publicUrl => {
     const raw = Object.keys(process.env)
-      .filter(key => /^APP_/i.test(key))
+      .filter(key => APP_PREFIX_REGEX.test(key))
       .reduce(
         (env, key) => {
           env[key] = process.env[key];

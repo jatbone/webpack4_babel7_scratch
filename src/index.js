@@ -1,4 +1,3 @@
-import 'normalize.css';
 import 'assets/styles/index.scss';
 // import * as serviceWorker from './serviceWorker';
 
