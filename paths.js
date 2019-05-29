@@ -33,19 +33,30 @@ const resolveModule = (resolveFn, filePath) => {
 const getPublicUrl = appPackageJson =>
   envPublicUrl || require(appPackageJson).homepage;
 
+const appPages = { index: 'index', about: 'index' };
+
+const appJs = Object.keys(appPages).reduce(
+  (prev, page) => ({ ...prev, [page]: resolveModule(resolveApp, `src/${appPages[page]}`) }),
+  {}
+);
+const appHtml = Object.keys(appPages).map(page => ({
+  template: resolveApp(`public/${page}.html`),
+  filename: `${page}.html`,
+  chunk: appPages[page]
+}));
 
 module.exports = {
+  appHtml,
+  appJs,
   dotenv: resolveApp('.env'),
   appPath: resolveApp('.'),
   appBuild: resolveApp('build'),
   appPublic: resolveApp('public'),
-  appHtml: resolveApp('public/index.html'),
-  appIndexJs: resolveModule(resolveApp, 'src/index'),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),
   yarnLockFile: resolveApp('yarn.lock'),
   appNodeModules: resolveApp('node_modules'),
-  publicUrl: getPublicUrl(resolveApp('package.json')),
+  publicUrl: getPublicUrl(resolveApp('package.json'))
 };
 
 module.exports.moduleFileExtensions = moduleFileExtensions;

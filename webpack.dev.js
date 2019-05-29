@@ -31,37 +31,41 @@ module.exports = {
     port: process.env.PORT || 8080,
     contentBase: paths.appPublic
   },
-  entry: [
-    // Include an alternative client for WebpackDevServer. A client's job is to
-    // connect to WebpackDevServer by a socket and get notified about changes.
-    // When you save a file, the client will either apply hot updates (in case
-    // of CSS changes), or refresh the page (in case of JS changes). When you
-    // make a syntax error, this client will display a syntax error overlay.
-    // Note: instead of the default WebpackDevServer client, we use a custom one
-    // to bring better experience for Create React App users. You can replace
-    // the line below with these two lines if you prefer the stock client:
-    // require.resolve('webpack-dev-server/client') + '?/',
-    // require.resolve('webpack/hot/dev-server'),
-    // require.resolve('react-dev-utils/webpackHotDevClient'),
-    // Finally, this is your app's code:
-    paths.appIndexJs
-    // We include the app code last so that if there is a runtime error during
-    // initialization, it doesn't blow up the WebpackDevServer client, and
-    // changing JS code would still trigger a refresh.
-  ],
+  entry: Object.assign(
+    {},
+    {
+      // Include an alternative client for WebpackDevServer. A client's job is to
+      // connect to WebpackDevServer by a socket and get notified about changes.
+      // When you save a file, the client will either apply hot updates (in case
+      // of CSS changes), or refresh the page (in case of JS changes). When you
+      // make a syntax error, this client will display a syntax error overlay.
+      // Note: instead of the default WebpackDevServer client, we use a custom one
+      // to bring better experience for Create React App users. You can replace
+      // the line below with these two lines if you prefer the stock client:
+      // require.resolve('webpack-dev-server/client') + '?/',
+      // require.resolve('webpack/hot/dev-server'),
+      // require.resolve('react-dev-utils/webpackHotDevClient'),
+      // Finally, this is your app's code:
+      // We include the app code last so that if there is a runtime error during
+      // initialization, it doesn't blow up the WebpackDevServer client, and
+      // changing JS code would still trigger a refresh.
+    },
+    paths.appJs
+  ),
   output: {
     // Add /* filename */ comments to generated require()s in the output.
     pathinfo: true,
     // There will be one main bundle, and one file per asynchronous chunk.
     // In development, it does not produce real files.
-    filename: 'static/js/bundle.js',
+    filename: 'static/js/[name].bundle.js',
     // TODO: remove this when upgrading to webpack 5
     futureEmitAssets: true,
     // There are also additional JS chunk files if you use code splitting.
-    chunkFilename: 'static/js/[name].chunk.js',
+    chunkFilename: 'static/js/[name].[chunkhash].js',
     // We inferred the "public path" (such as / or /my-project) from homepage.
     // We use "/" in development.
-    publicPath: publicPath
+    publicPath: publicPath,
+    sourceMapFilename: '[file].map'
   },
   optimization: {
     minimize: false,
@@ -187,10 +191,15 @@ module.exports = {
     ]
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      template: paths.appHtml,
-      inject: true
-    }),
+    ...paths.appHtml.map(
+      obj =>
+        new HtmlWebpackPlugin({
+          inject: true,
+          template: obj.template,
+          filename: obj.filename,
+          chunks: [obj.chunk]
+        })
+    ),
     new InterpolateHtmlPlugin(HtmlWebpackPlugin, env.raw),
     new ModuleNotFoundPlugin(paths.appPath),
     new webpack.DefinePlugin(env.stringified),
