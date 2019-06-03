@@ -1,11 +1,15 @@
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
 html,
 body {
   height: 100%;
   width: 100%;
-  font-size: 100%;
   font-family: 'Roboto', sans-serif;
-  text-align: center;
-  font-weight: lighter;
+  margin: 0;
 }
 
 a {

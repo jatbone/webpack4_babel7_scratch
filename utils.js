@@ -1,5 +1,12 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const postcssNormalize = require('postcss-normalize');
+const purgecss = require('@fullhuman/postcss-purgecss');
+
+class TailwindExtractor {
+  static extract(content) {
+    return content.match(/[A-Za-z0-9-_:\/]+/g) || [];
+  }
+}
 
 const APP_PREFIX_REGEX = /^APP_/i;
 
@@ -52,7 +59,8 @@ module.exports = {
           // Necessary for external CSS imports to work
           // https://github.com/facebook/create-react-app/issues/2677
           ident: 'postcss',
-          plugins: () => [
+          plugins: [
+            require('tailwindcss'),
             require('postcss-flexbugs-fixes'),
             require('postcss-preset-env')({
               autoprefixer: {
@@ -63,8 +71,19 @@ module.exports = {
             // Adds PostCSS Normalize as the reset css with default options,
             // so that it honors browserslist config in package.json
             // which in turn let's users customize the target behavior as per their needs.
-            postcssNormalize()
-          ],
+            postcssNormalize(),
+            isEnvProduction && purgecss({
+              content: ['./public/*.html', './src/**/*.js'],
+              whitelist: ['html', 'body'],
+              whitelistPatternsChildren: [/^token/, /^pre/, /^code/],
+              extractors: [
+                {
+                  extractor: TailwindExtractor,
+                  extensions: ['html', 'js']
+                }
+              ]
+            })
+          ].filter(Boolean),
           sourceMap: isEnvProduction
         }
       }
