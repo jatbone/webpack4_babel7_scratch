@@ -1,4 +1,5 @@
 import { tns } from 'tiny-slider/src/tiny-slider';
+import Test from 'components/test';
 
 import 'assets/styles/index.scss';
 import 'tiny-slider/src/tiny-slider.scss';
@@ -23,7 +24,7 @@ const slider = tns({
   container: '#slider',
   items: 1,
   slideBy: 'page',
-  autoplay: true
+  autoplay: false
 });
 
 window.onload = () => {
@@ -33,6 +34,8 @@ window.onload = () => {
     e.preventDefault();
     toggle(nav);
   });
+  const t = new Test('goo');
+  console.log(t.toString());
 };
 
 // If you want your app to work offline and load faster, you can change

@@ -21,14 +21,16 @@
         Logo
       </div>
       <div class="ml-auto">
-        <a href="#" class="btn-nav-toggle md:hidden">
+        <a href="#" class="block btn-nav-toggle md:hidden">
           <div class="bg-black h-1 w-8 mb-1"></div>
           <div class="bg-black h-1 w-8 mb-1"></div>
           <div class="bg-black h-1 w-8"></div>
         </a>
       </div>
     </header>
-    <nav class="w-full bg-gray-200 hidden md:block absolute md:static">
+    <nav
+      class="w-full bg-gray-200 hidden md:block absolute md:static  z-10 md:z-auto"
+    >
       <ul class="flex flex-col md:flex-row">
         <li class="md:mr-1 ">
           <a
@@ -63,16 +65,14 @@
     <main>
       <ul id="slider">
         <li>
-          <a
-            href="https://webpack.js.org/"
-            target="_blank"
-            class="block w-full"
+          <a href="https://webpack.js.org/" target="_blank" class="block w-full"
             ><img
               class="w-full h-auto"
               src="<%= require('../src/assets/images/logo-on-dark-bg.png') %>"
               alt="webpack logo"
           /></a>
-        </li>        <li>
+        </li>
+        <li>
           <a
             href="https://javascript.info/"
             target="_blank"
