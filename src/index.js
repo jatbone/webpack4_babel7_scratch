@@ -1,7 +1,13 @@
-import 'assets/styles/index.scss';
-// import * as serviceWorker from './serviceWorker';
+import anime from 'animejs/lib/anime.es';
 
-console.log('tu som');
+// import * as serviceWorker from './serviceWorker';
+import 'assets/styles/index.scss';
+
+  anime({
+    targets: '#anime-test',
+    translateX: 20,
+    easing: 'easeInOutExpo'
+  });
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
