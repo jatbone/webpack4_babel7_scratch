@@ -1,6 +1,7 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const postcssNormalize = require('postcss-normalize');
 const purgecss = require('@fullhuman/postcss-purgecss');
+const whitelister = require('purgecss-whitelister');
 
 class TailwindExtractor {
   static extract(content) {
@@ -72,17 +73,21 @@ module.exports = {
             // so that it honors browserslist config in package.json
             // which in turn let's users customize the target behavior as per their needs.
             postcssNormalize(),
-            isEnvProduction && purgecss({
-              content: ['./public/*.html', './src/**/*.js'],
-              whitelist: ['html', 'body'],
-              whitelistPatternsChildren: [/^token/, /^pre/, /^code/],
-              extractors: [
-                {
-                  extractor: TailwindExtractor,
-                  extensions: ['html', 'js']
-                }
-              ]
-            })
+            isEnvProduction &&
+              purgecss({
+                content: ['./public/*.html', './src/**/*.js'],
+                whitelist: [].concat(
+                  ['html', 'body'],
+                  whitelister('./node_modules/tiny-slider/src/tiny-slider.scss')
+                ),
+                whitelistPatternsChildren: [/^token/, /^pre/, /^code/],
+                extractors: [
+                  {
+                    extractor: TailwindExtractor,
+                    extensions: ['html', 'js']
+                  }
+                ]
+              })
           ].filter(Boolean),
           sourceMap: isEnvProduction
         }
