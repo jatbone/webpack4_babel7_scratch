@@ -121,7 +121,8 @@ module.exports = {
             loader: 'url-loader',
             options: {
               limit: 10000,
-              name: 'static/media/[name].[hash:8].[ext]'
+              name: 'static/media/[name].[hash:8].[ext]',
+              esModule: false
             }
           },
           {
@@ -183,7 +184,8 @@ module.exports = {
             // by webpacks internal loaders.
             exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
             options: {
-              name: 'static/media/[name].[hash:8].[ext]'
+              name: 'static/media/[name].[hash:8].[ext]',
+              esModule: false
             }
           }
         ]
